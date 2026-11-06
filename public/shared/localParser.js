@@ -14,6 +14,14 @@ const CATEGORY_RULES = [
   ["의료", ["병원", "약국", "약", "치과", "한의원"]],
 ];
 
+// 글에서 카테고리만 알아냄 (없으면 null). 예: "커피" → 카페, "식비" → 식비
+export function categoryFromText(text) {
+  for (const [cat, words] of CATEGORY_RULES) {
+    if (text.includes(cat) || words.some((w) => text.includes(w))) return cat;
+  }
+  return null;
+}
+
 function guessCategory(text, type) {
   if (type === "income") {
     if (/월급|급여|보너스|상여/.test(text)) return "월급";

@@ -5,6 +5,7 @@ import path from "node:path";
 import express from "express";
 import db, { save, nextId, dateKey, UPLOAD_DIR } from "./lib/db.js";
 import { localParse } from "./public/shared/localParser.js";
+import { answerQuery } from "./public/shared/chatQuery.js";
 import { aiEnabled, aiProvider, aiParseText, aiParseImage } from "./lib/ai.js";
 import { getStats } from "./lib/stats.js";
 import { authEnabled, loginHandler, requireLogin } from "./lib/auth.js";
@@ -35,7 +36,7 @@ if (db.messages.length === 0) {
     id: nextId(),
     role: "bot",
     ts: Date.now(),
-    text: "안녕! 나는 머니야 👋\n돈 쓰거나 들어오면 그냥 말해줘.\n예) 스타벅스 5800 / 점심 김밥 4천원 / 월급 300만원 들어옴",
+    text: "안녕! 나는 머니야 👋\n돈 쓰거나 들어오면 그냥 말해줘.\n예) 스타벅스 5800 / 점심 김밥 4천원 / 월급 300만원 들어옴\n궁금하면 \"오늘 얼마 썼어?\" 하고 물어봐도 돼!",
   });
   db.messages.push({ id: nextId(), role: "bot", ts: Date.now(), text: "매일 밤 9시에 내가 먼저 물어봐도 될까?", askNotify: true });
   if (new Date().getHours() >= 21) db.meta.lastReminderDate = dateKey();
@@ -85,7 +86,7 @@ function applyResult(result, fallbackReply) {
   return addMessage({ role: "bot", text, entryIds: saved.map((e) => e.id) });
 }
 
-const HELP = "음, 금액을 못 찾았어 🤔 \"어디서 얼마\" 처럼 말해줄래? 예) 편의점 3200";
+const HELP = "음, 금액을 못 찾았어 🤔 \"어디서 얼마\" 처럼 말해줄래? 예) 편의점 3200\n쓴 돈이 궁금하면 \"이번 주 얼마 썼어?\" 하고 물어봐!";
 
 // ---------- API ----------
 
@@ -105,6 +106,14 @@ app.post("/api/chat", async (req, res) => {
   const text = String(req.body.text || "").trim();
   if (!text) return res.status(400).json({ error: "빈 메시지" });
   const userMsg = addMessage({ role: "user", text });
+
+  // 질문이면("나 오늘 얼마 썼어?") 저장된 기록으로 바로 답한다. 금액이 들어간 문장은 기록이 우선.
+  const answer = localParse(text).kind === "record" ? null : answerQuery(text, db.entries);
+  if (answer) {
+    const botMsg = addMessage({ role: "bot", text: answer });
+    save();
+    return res.json({ messages: [withEntries(userMsg), withEntries(botMsg)] });
+  }
 
   let result;
   if (aiEnabled) {

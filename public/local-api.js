@@ -2,10 +2,11 @@
 // 화면(app.js)은 그대로 두고, /api/... 요청만 여기서 대신 처리해요.
 import { localParse } from "/shared/localParser.js";
 import { computeStats, dateKey } from "/shared/statsCore.js";
+import { answerQuery } from "/shared/chatQuery.js";
 
 const KEY = "money-chat-db-v1";
 const won = (n) => Number(n).toLocaleString("ko-KR") + "원";
-const HELP = "음, 금액을 못 찾았어 🤔 \"어디서 얼마\" 처럼 말해줄래? 예) 편의점 3200";
+const HELP = "음, 금액을 못 찾았어 🤔 \"어디서 얼마\" 처럼 말해줄래? 예) 편의점 3200\n쓴 돈이 궁금하면 \"이번 주 얼마 썼어?\" 하고 물어봐!";
 
 const empty = () => ({ messages: [], entries: [], meta: { lastReminderDate: null, nextId: 1 } });
 
@@ -47,7 +48,7 @@ function greet() {
   if (db.messages.length) return;
   addMessage({
     role: "bot",
-    text: "안녕! 나는 머니야 👋\n돈 쓰거나 들어오면 그냥 말해줘.\n예) 스타벅스 5800 / 점심 김밥 4천원 / 월급 300만원 들어옴",
+    text: "안녕! 나는 머니야 👋\n돈 쓰거나 들어오면 그냥 말해줘.\n예) 스타벅스 5800 / 점심 김밥 4천원 / 월급 300만원 들어옴\n궁금하면 \"오늘 얼마 썼어?\" 하고 물어봐도 돼!",
   });
   addMessage({ role: "bot", text: "밤 9시 넘어서 앱을 열면 내가 먼저 물어볼게! 🌙" });
   if (new Date().getHours() >= 21) db.meta.lastReminderDate = dateKey();
@@ -116,7 +117,10 @@ function route(method, url, body) {
     const text = String(body.text || "").trim();
     if (!text) return { status: 400, body: { error: "빈 메시지" } };
     const userMsg = addMessage({ role: "user", text });
-    const botMsg = applyResult(localParse(text));
+    const parsed = localParse(text);
+    // 질문이면("나 오늘 얼마 썼어?") 저장된 기록으로 바로 답한다. 금액이 들어간 문장은 기록이 우선.
+    const answer = parsed.kind === "record" ? null : answerQuery(text, db.entries);
+    const botMsg = answer ? addMessage({ role: "bot", text: answer }) : applyResult(parsed);
     save();
     return { body: { messages: [withEntries(userMsg), withEntries(botMsg)] } };
   }
