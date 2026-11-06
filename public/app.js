@@ -269,31 +269,65 @@ document.querySelectorAll(".segmented button").forEach((b) => {
 $("#prev").onclick = () => { offset--; loadStats(); };
 $("#next").onclick = () => { if (offset < 0) { offset++; loadStats(); } };
 
+// 카테고리마다 정해진 색 (차분한 톤)
+const CAT_COLORS = { 식비: "#ff9f0a", 카페: "#a2845e", 교통: "#0a84ff", 쇼핑: "#bf5af2", 생활: "#30b0c7", 문화: "#ff375f", 의료: "#34c759", 기타: "#8e8e93" };
+const catColor = (name) => CAT_COLORS[name] || "#8e8e93";
+
+let lastStats = null;
+let activeCat = null; // 눌러서 고른 카테고리
+let statsKey = "";
+
 async function loadStats() {
   const s = await (await fetch(`/api/stats?period=${period}&offset=${offset}`)).json();
+  // 기간이 바뀌면 카테고리 선택은 풀어준다
+  const key = `${period}:${offset}`;
+  if (key !== statsKey) {
+    activeCat = null;
+    statsKey = key;
+  }
+  lastStats = s;
+  renderStats();
+}
+
+function renderStats() {
+  const s = lastStats;
+  if (!s) return;
+  if (activeCat && !s.categories.some((c) => c.name === activeCat)) activeCat = null;
+
   $("#periodLabel").textContent = s.label;
   $("#next").disabled = offset >= 0;
   $("#sumExpense").textContent = won(s.expense);
   $("#sumIncome").textContent = won(s.income);
 
-  const max = s.categories[0]?.amount || 1;
+  // 카테고리별: 한 줄 비율 막대 + 목록(비율, 금액)
+  const total = s.expense || 1;
+  $("#catStack").innerHTML = s.categories
+    .map((c) => `<i style="flex:${c.amount};background:${catColor(c.name)};${activeCat && activeCat !== c.name ? "opacity:.25" : ""}"></i>`)
+    .join("");
   $("#catList").innerHTML = s.categories.length
     ? s.categories
-        .map(
-          (c) => `<li class="row"><div class="left" style="flex:1"><div class="title">${esc(c.name)}</div>
-          <div class="bar" style="width:${Math.max(4, (c.amount / max) * 100)}%"></div></div>
-          <span class="amt">${won(c.amount)}</span></li>`,
-        )
+        .map((c) => {
+          const pct = (c.amount / total) * 100;
+          const pctText = pct < 1 ? "1% 미만" : `${Math.round(pct)}%`;
+          return `<li class="row cat${activeCat === c.name ? " on" : ""}" data-cat="${esc(c.name)}" role="button" tabindex="0">
+            <span class="dot" style="background:${catColor(c.name)}"></span>
+            <span class="title" style="flex:1">${esc(c.name)}</span>
+            <span class="pct">${pctText}</span>
+            <span class="amt">${won(c.amount)}</span></li>`;
+        })
         .join("")
     : `<li class="empty">아직 쓴 돈이 없어</li>`;
+  $("#catHint").hidden = !s.categories.length;
 
   $("#placeList").innerHTML = s.places.length
     ? s.places.map((p) => `<li class="row"><span class="title">${esc(p.name)}</span><span class="amt">${won(p.amount)}</span></li>`).join("")
     : `<li class="empty">아직 기록이 없어</li>`;
 
-  // 날짜별 내역
+  // 날짜별 내역 (카테고리를 골랐으면 그 카테고리 지출만)
+  const entries = activeCat ? s.entries.filter((e) => e.type === "expense" && e.category === activeCat) : s.entries;
+  $("#entryTitle").textContent = activeCat ? `${activeCat} 내역` : "전체 내역";
   const byDay = {};
-  s.entries.forEach((e) => (byDay[e.date] ||= []).push(e));
+  entries.forEach((e) => (byDay[e.date] ||= []).push(e));
   const days = Object.keys(byDay);
   $("#entryList").innerHTML = days.length
     ? days
@@ -312,6 +346,18 @@ async function loadStats() {
 
   $("#aiState").textContent = aiEnabled ? "AI가 문장을 이해해요" : "";
 }
+
+// 카테고리를 누르면 그 내역만, 한 번 더 누르면 전체로
+function pickCategory(ev) {
+  const li = ev.target.closest("[data-cat]");
+  if (!li) return;
+  if (ev.type === "keydown" && ev.key !== "Enter" && ev.key !== " ") return;
+  ev.preventDefault();
+  activeCat = activeCat === li.dataset.cat ? null : li.dataset.cat;
+  renderStats();
+}
+$("#catList").addEventListener("click", pickCategory);
+$("#catList").addEventListener("keydown", pickCategory);
 
 /* ---------------- 시작 ---------------- */
 

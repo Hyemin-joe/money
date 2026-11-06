@@ -308,3 +308,13 @@ h3 {
 .day { font-size: 13px; color: var(--sub); margin: 14px 4px 6px; }
 .empty { padding: 14px; color: var(--sub); font-size: 15px; }
 .foot { font-size: 12px; color: var(--sub); text-align: center; margin-top: 28px; }
+
+/* 카테고리별 지출 */
+.stack { display: flex; gap: 2px; height: 10px; margin: 0 2px 12px; border-radius: 5px; overflow: hidden; }
+.stack i { display: block; min-width: 4px; border-radius: 2px; transition: opacity 0.2s; }
+.row.cat { cursor: pointer; gap: 10px; }
+.row.cat.on { background: var(--blue-soft); }
+.row.cat:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.pct { color: var(--sub); font-size: 14px; font-variant-numeric: tabular-nums; }
+.hint { font-size: 12px; color: var(--sub); margin: 8px 4px 0; }
