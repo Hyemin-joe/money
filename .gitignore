@@ -1,0 +1,8 @@
+node_modules/
+data/
+.env
+.DS_Store
+
+# 참고용 이미지 (내 컴퓨터에만 보관)
+796d32d0e32e6b03bb9cb15e3a6a30b5.jpg
+7b20b6b500d4b1f8bb694ac47a4a96f1.jpg

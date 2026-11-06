@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <title>머니 – 로그인</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .login { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; }
+    .login .avatar { width: 72px; height: 72px; font-size: 20px; }
+    .login h1 { margin: 0; font-size: 22px; font-weight: 600; }
+    .login p { margin: 0; color: var(--sub); font-size: 15px; }
+    .login form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .login input { border: 1px solid var(--line); border-radius: 12px; background: var(--field); color: var(--text); font: inherit; padding: 12px 14px; outline: 0; }
+    .login button { background: var(--blue); color: #fff; border-radius: 12px; padding: 12px; font-weight: 600; }
+    .login button[disabled] { opacity: 0.5; }
+    .err { color: #ff453a; font-size: 14px; min-height: 18px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main class="login">
+    <div class="avatar">머니</div>
+    <h1>머니</h1>
+    <p>비밀번호를 입력해줘</p>
+    <form id="f">
+      <input id="pw" type="password" placeholder="비밀번호" autocomplete="current-password" autofocus />
+      <div class="err" id="err" role="alert"></div>
+      <button id="go" type="submit">들어가기</button>
+    </form>
+  </main>
+  <script>
+    const f = document.getElementById("f"), pw = document.getElementById("pw"), err = document.getElementById("err"), go = document.getElementById("go");
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      go.disabled = true;
+      try {
+        const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: pw.value }) });
+        if (r.ok) return (location.href = "/");
+        err.textContent = (await r.json()).error || "로그인에 실패했어요";
+      } catch {
+        err.textContent = "서버에 연결할 수 없어요";
+      }
+      go.disabled = false;
+      pw.select();
+    });
+  </script>
+</body>
+</html>

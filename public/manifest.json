@@ -1,0 +1,9 @@
+{
+  "name": "머니 – 채팅 가계부",
+  "short_name": "머니",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
