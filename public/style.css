@@ -37,6 +37,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 [hidden] { display: none !important; }
+/* 서버 없이 쓰는 모드(무료 호스팅)일 때 화면 차이 */
+html:not([data-mode="local"]) .local-only { display: none; }
+html[data-mode="local"] .server-only { display: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
 
 .app {

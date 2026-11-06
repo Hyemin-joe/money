@@ -72,8 +72,21 @@
       <h3>전체 내역</h3>
       <div id="entryList"></div>
 
-      <h3>알림</h3>
-      <ul class="list">
+      <h3 class="local-only">내 기록 보관</h3>
+      <ul class="list local-only">
+        <li class="row">
+          <span>백업 파일로 저장</span>
+          <button class="pill" id="exportBtn">저장</button>
+        </li>
+        <li class="row">
+          <span>백업 파일 불러오기</span>
+          <button class="pill" id="importBtn">불러오기</button>
+        </li>
+      </ul>
+      <input type="file" id="importInput" accept="application/json,.json" hidden />
+
+      <h3 class="server-only">알림</h3>
+      <ul class="list server-only">
         <li class="row">
           <span>밤 9시 알림</span>
           <button class="pill" id="notifyBtn">켜기</button>
@@ -87,6 +100,6 @@
     </div>
   </section>
 
-  <script src="/app.js"></script>
+  <script type="module" src="/boot.js"></script>
 </body>
 </html>
