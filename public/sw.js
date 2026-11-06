@@ -3,10 +3,10 @@ self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
 self.addEventListener("push", (event) => {
-  let data = { title: "머니", body: "오늘 쓴 돈 있어? 💬" };
+  let data = { title: "money friend", body: "오늘 쓴 돈 있어? 💬" };
   try { data = { ...data, ...event.data.json() }; } catch {}
   event.waitUntil(
-    self.registration.showNotification(data.title, { body: data.body, icon: "/icon.svg", tag: "daily-reminder" })
+    self.registration.showNotification(data.title, { body: data.body, icon: "/icon-192.png", tag: "daily-reminder" })
   );
 });
 

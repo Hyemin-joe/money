@@ -72,6 +72,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: linear-gradient(180deg, #a5abb8, #858994);
   color: #fff; font-size: 14px; font-weight: 600; letter-spacing: -0.3px;
 }
+.avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .name { font-size: 12px; color: var(--text); }
 .chev { color: var(--sub); }
 .link-btn { color: var(--blue); font-size: 17px; }

@@ -1,0 +1,9 @@
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17aaff"/><stop offset="1" stop-color="#0a8cff"/></linearGradient>
+  <radialGradient id="bl" cx="0.5" cy="0.55" r="0.55"><stop offset="0" stop-color="#10b0ff"/><stop offset="0.6" stop-color="#26bcff"/><stop offset="0.88" stop-color="#9adfff"/><stop offset="1" stop-color="#fff"/></radialGradient>
+  <linearGradient id="ey" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6fcff"/><stop offset="1" stop-color="#b9e8ff"/></linearGradient>
+  <filter id="s"><feGaussianBlur stdDeviation="5"/></filter><filter id="glow"><feGaussianBlur stdDeviation="9"/></filter></defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g filter="url(#s)"><ellipse cx="512" cy="560" rx="350" ry="316" fill="url(#bl)"/></g>
+  <ellipse cx="418" cy="520" rx="62" ry="80" fill="url(#ey)"/>
+  <ellipse cx="606" cy="480" rx="62" ry="80" fill="url(#ey)" transform="rotate(-8 606 480)"/>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"><g filter="url(#glow)" opacity="0.6"><path d="M454 640 L483 770 L512 687 L541 770 L570 640" stroke-width="36"/></g><path d="M454 640 L483 770 L512 687 L541 770 L570 640" stroke-width="28"/><path d="M421 692 H603" stroke-width="15"/><path d="M424 723 H600" stroke-width="15"/></g>

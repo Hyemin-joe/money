@@ -9,3 +9,6 @@ data/
 
 # 무료 호스팅에 올릴 때 만들어지는 폴더 (npm run build:web)
 web-dist/
+
+# 아이콘 시안 모음 (내 컴퓨터에만 보관)
+scripts/icon/sketches/

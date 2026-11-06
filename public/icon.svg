@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0a84ff"/><path d="M32 14c-11 0-20 7.2-20 16.2 0 5.3 3.1 10 8 13-.4 2.8-1.8 5.5-4 7.3 4.6-.2 8.6-2 11.5-4.6 1.5.3 3 .4 4.5.4 11 0 20-7.2 20-16.1S43 14 32 14Z" fill="#fff"/><text x="32" y="36" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16" font-weight="700" fill="#0a84ff">₩</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <clipPath id="round"><rect width="1024" height="1024" rx="226"/></clipPath>
+  <g clip-path="url(#round)">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17aaff"/><stop offset="1" stop-color="#0a8cff"/></linearGradient>
+  <radialGradient id="bl" cx="0.5" cy="0.55" r="0.55"><stop offset="0" stop-color="#10b0ff"/><stop offset="0.6" stop-color="#26bcff"/><stop offset="0.88" stop-color="#9adfff"/><stop offset="1" stop-color="#fff"/></radialGradient>
+  <linearGradient id="ey" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6fcff"/><stop offset="1" stop-color="#b9e8ff"/></linearGradient>
+  <filter id="s"><feGaussianBlur stdDeviation="5"/></filter><filter id="glow"><feGaussianBlur stdDeviation="9"/></filter></defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g filter="url(#s)"><ellipse cx="512" cy="560" rx="350" ry="316" fill="url(#bl)"/></g>
+  <ellipse cx="418" cy="520" rx="62" ry="80" fill="url(#ey)"/>
+  <ellipse cx="606" cy="480" rx="62" ry="80" fill="url(#ey)" transform="rotate(-8 606 480)"/>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"><g filter="url(#glow)" opacity="0.6"><path d="M454 640 L483 770 L512 687 L541 770 L570 640" stroke-width="36"/></g><path d="M454 640 L483 770 L512 687 L541 770 L570 640" stroke-width="28"/><path d="M421 692 H603" stroke-width="15"/><path d="M424 723 H600" stroke-width="15"/></g>
+  </g>
+</svg>
