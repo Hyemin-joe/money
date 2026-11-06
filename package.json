@@ -4,9 +4,9 @@
   "private": true,
   "description": "친구처럼 물어봐 주는 채팅 가계부",
   "type": "module",
-  "main": "server.js",
+  "main": "money-server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node money-server.js",
     "build:web": "node scripts/build-web.js"
   },
   "dependencies": {

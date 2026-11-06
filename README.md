@@ -21,5 +21,9 @@
 
 ## 파일 구조 (참고)
 - `public/` 화면 (index.html, style.css, app.js)
-- `server.js` 서버 / `lib/` 문장 해석·AI·통계·알림
+- `money-server.js` 서버 / `lib/` 문장 해석·AI·통계·알림
 - `data/db.json` 내 기록이 저장되는 곳 (백업하려면 이 파일을 복사)
+
+## 무료 호스팅(Vercel)에 올릴 때
+- 화면 파일만 올리는 방식이에요 (서버 없이 폰 안에 저장). `vercel.json` 이 `public` 폴더만 올리도록 설정돼 있어요.
+- 그래도 안 되면 Vercel 프로젝트 Settings → Build and Deployment → **Root Directory** 를 `public` 으로 바꾸세요.
